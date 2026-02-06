@@ -17,7 +17,7 @@ include:
     shield: klor_left
   - board: nice_nano_v2
     shield: klor_right
-  - board: nice_nano_v2
-    shield: klor_dongle
+  - board: seeeduino_xiao_ble
+    shield: klor_dongle prospector_adapter
   - board: nice_nano_v2
     shield: settings_reset
