@@ -2,18 +2,14 @@ manifest:
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
-    # Задаем базовый URL строго до аккаунта автора экрана
-    - name: janpfischer
-      url-base: https://github.com
   projects:
     - name: zmk
       remote: zmkfirmware
       revision: v0.3-branch
       import: app/west.yml
-    # Указываем имя конкретного репозитория автора. 
-    # West корректно склеит это в https://github.com/zmk-dongle-screen
+    # Изолируем проект от секции remotes, принудительно передавая полный URL
     - name: zmk-dongle-screen
-      remote: janpfischer
+      url: https://github.com
       revision: main
       path: zmk-dongle-screen
   self:
