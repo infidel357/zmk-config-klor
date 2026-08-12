@@ -1,11 +1,16 @@
 manifest:
+  remotes:
+    - name: zmkfirmware
+      url-base: https://github.com
+    - name: janpfischer
+      url-base: https://github.com
   projects:
     - name: zmk
-      url: https://github.com
+      remote: zmkfirmware
       revision: v0.3-branch
       import: app/west.yml
     - name: zmk-dongle-screen
-      url: https://github.com
+      remote: janpfischer
       revision: main
   self:
     path: config
