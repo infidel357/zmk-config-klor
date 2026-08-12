@@ -2,7 +2,7 @@ manifest:
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
-    # Регистрируем удаленный сервер автора YADS
+    # Задаем базовый URL строго до аккаунта автора экрана
     - name: janpfischer
       url-base: https://github.com
   projects:
@@ -10,7 +10,8 @@ manifest:
       remote: zmkfirmware
       revision: v0.3-branch
       import: app/west.yml
-    # Подключаем проект экрана через зарегистрированный remote
+    # Указываем имя конкретного репозитория автора. 
+    # West корректно склеит это в https://github.com/zmk-dongle-screen
     - name: zmk-dongle-screen
       remote: janpfischer
       revision: main
