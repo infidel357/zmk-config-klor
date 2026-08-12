@@ -12,3 +12,4 @@ features:
 siblings:
   - klor_left
   - klor_right
+  - klor_dongle # <--- ДОБАВЛЯЕМ НАШ ДОНГЛ В СПИСОК СВЯЗАННЫХ УСТРОЙСТВ
