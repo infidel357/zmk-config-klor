@@ -1,7 +1,7 @@
 manifest:
   remotes:
     - name: zmkfirmware
-      url-base: https://github.com/zmkfirmware
+      url-base: https://github.com
     - name: janpfischer
       url-base: https://github.com
   projects:
@@ -14,4 +14,3 @@ manifest:
       revision: main
   self:
     path: config
-    import: true
