@@ -3,14 +3,14 @@ include:
   # 1. Прошивка для левой половины KLOR Polydactyl (на Pro Micro nRF52840)
   - board: nice_nano_v2
     shield: klor_left
-  
+
   # 2. Прошивка для правой половины KLOR Polydactyl (на Pro Micro nRF52840)
   - board: nice_nano_v2
     shield: klor_right
 
-  # 3. КРИТИЧЕСКИ ВАЖНО: Прошивка для донгла Prospector с экраном YADS (на XIAO BLE)
+  # 3. КРИТИЧЕСКИ ВАЖНО: Прошивка для донгла с экраном YADS (на XIAO BLE)
   - board: seeeduino_xiao_ble
-    shield: klor_dongle ssd1306_st7789v_prospector
+    shield: klor_dongle
 
   # 4. Файл очистки памяти для nice_nano_v2 (пригодится, если половины не захотят связываться)
   - board: nice_nano_v2
