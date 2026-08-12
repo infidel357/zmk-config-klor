@@ -1,21 +1,19 @@
-# This file generates the GitHub Actions matrix
+---
 include:
-  # 1. Прошивка для левой половины KLOR Polydactyl (на Pro Micro nRF52840)
   - board: nice_nano_v2
     shield: klor_left
+    artifact-name: klor_left-nice_nano_v2
 
-  # 2. Прошивка для правой половины KLOR Polydactyl (на Pro Micro nRF52840)
   - board: nice_nano_v2
     shield: klor_right
+    artifact-name: klor_right-nice_nano_v2
 
-  # 3. КРИТИЧЕСКИ ВАЖНО: Прошивка для донгла с экраном YADS (на XIAO BLE)
   - board: seeeduino_xiao_ble
-    shield: klor_dongle
+    shield: klor_dongle dongle_screen
+    artifact-name: klor_dongle-seeeduino_xiao_ble
 
-  # 4. Файл очистки памяти для nice_nano_v2 (пригодится, если половины не захотят связываться)
   - board: nice_nano_v2
     shield: settings_reset
 
-  # 5. Файл очистки памяти для контроллера донгла XIAO BLE
   - board: seeeduino_xiao_ble
     shield: settings_reset
