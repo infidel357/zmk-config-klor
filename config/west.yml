@@ -2,18 +2,17 @@ manifest:
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
-    # 1. Добавляем репозиторий автора прошивки экрана YADS
     - name: janpfischer
       url-base: https://github.com
   projects:
     - name: zmk
       remote: zmkfirmware
-      revision: v0.3-branch # Остаемся на стабильной ветке
+      revision: v0.3-branch
       import: app/west.yml
-    # 2. Подключаем графический модуль YADS. Ветка 'main' идеально совместима с v0.3-branch
+    # Подключаем графический модуль экрана YADS в отдельную папку
     - name: zmk-dongle-screen
       remote: janpfischer
       revision: main
-      path: config
+      path: zmk-dongle-screen # <--- ИСПРАВЛЕНО (было "config")
   self:
     path: config
