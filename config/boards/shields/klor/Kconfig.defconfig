@@ -1,35 +1,33 @@
+# Задаем имя клавиатуры для левой половины
 if SHIELD_KLOR_LEFT
-
     config ZMK_KEYBOARD_NAME
         default "KLOR"
 
     config ZMK_SPLIT_BLE_ROLE_CENTRAL
         default y
-
 endif # LEFT
 
+# Задаем имя для нашего беспроводного донгла Prospector
+if SHIELD_KLOR_DONGLE
+    config ZMK_KEYBOARD_NAME
+        default "KLOR Dongle"
+endif # DONGLE
 
-
+# Настройки сплит-системы (только для физических половин)
 if SHIELD_KLOR_LEFT || SHIELD_KLOR_RIGHT
 
     config ZMK_SPLIT
         default y
 
-
 if ZMK_DISPLAY
-
     config I2C
         default y
 
     config SSD1306
         default y
-
 endif # ZMK_DISPLAY
 
-
-
 if LVGL
-
     config LV_Z_VDB_SIZE
         default 64
 
@@ -42,8 +40,6 @@ if LVGL
     choice LV_COLOR_DEPTH
         default LV_COLOR_DEPTH_1
     endchoice
-
 endif # LVGL
-
 
 endif # LEFT RIGHT
