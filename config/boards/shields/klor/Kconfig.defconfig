@@ -1,31 +1,40 @@
-# Задаем имя клавиатуры для левой половины
+# ==========================================================================
+# КОНФИГУРАЦИЯ ИМЕН УСТРОЙСТВ
+# ==========================================================================
+
+# Настройки для левой половины (если используется без донгла)
 if SHIELD_KLOR_LEFT
     config ZMK_KEYBOARD_NAME
         default "KLOR"
 
     config ZMK_SPLIT_BLE_ROLE_CENTRAL
         default y
-endif # LEFT
+endif
 
-# Задаем имя для нашего беспроводного донгла Prospector
+# Настройки для беспроводного донгла YADS
 if SHIELD_KLOR_DONGLE
     config ZMK_KEYBOARD_NAME
         default "KLOR Dongle"
-endif # DONGLE
+endif
 
-# Настройки сплит-системы (только для физических половин)
-if SHIELD_KLOR_LEFT || SHIELD_KLOR_RIGHT
-
+# ==========================================================================
+# СИСТЕМНЫЕ НАСТРОЙКИ СПЛИТ-РЕЖИМА
+# ==========================================================================
+if SHIELD_KLOR_LEFT || SHIELD_KLOR_RIGHT || SHIELD_KLOR_DONGLE
     config ZMK_SPLIT
         default y
+endif
 
+# ==========================================================================
+# НАСТРОЙКИ ГРАФИКИ И ЭКРАНОВ (Общие для половин и донгла YADS)
+# ==========================================================================
 if ZMK_DISPLAY
     config I2C
         default y
 
     config SSD1306
         default y
-endif # ZMK_DISPLAY
+endif
 
 if LVGL
     config LV_Z_VDB_SIZE
@@ -40,6 +49,4 @@ if LVGL
     choice LV_COLOR_DEPTH
         default LV_COLOR_DEPTH_1
     endchoice
-endif # LVGL
-
-endif # LEFT RIGHT
+endif
