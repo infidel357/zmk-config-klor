@@ -1,21 +1,21 @@
 # This file generates the GitHub Actions matrix
-# For simple board + shield combinations, add them
-# to the top level board and shield arrays, for more
-# control, add individual board + shield combinations to
-# the `include` property, e.g:
-#
-# board: [ "nice_nano_v2" ]
-# shield: [ "corne_left", "corne_right" ]
-# include:
-#   - board: bdn9_rev2
-#   - board: nice_nano_v2
-#     shield: reviung41
-#
-
 include:
+  # 1. Прошивка для левой половины KLOR Polydactyl (на Pro Micro nRF52840)
   - board: nice_nano_v2
     shield: klor_left
+  
+  # 2. Прошивка для правой половины KLOR Polydactyl (на Pro Micro nRF52840)
   - board: nice_nano_v2
     shield: klor_right
+
+  # 3. КРИТИЧЕСКИ ВАЖНО: Прошивка для донгла Prospector с экраном YADS (на XIAO BLE)
+  - board: seeeduino_xiao_ble
+    shield: klor_dongle ssd1306_st7789v_prospector
+
+  # 4. Файл очистки памяти для nice_nano_v2 (пригодится, если половины не захотят связываться)
   - board: nice_nano_v2
+    shield: settings_reset
+
+  # 5. Файл очистки памяти для контроллера донгла XIAO BLE
+  - board: seeeduino_xiao_ble
     shield: settings_reset
