@@ -2,17 +2,15 @@ manifest:
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
-    - name: janpfischer
-      url-base: https://github.com
   projects:
     - name: zmk
       remote: zmkfirmware
       revision: v0.3-branch
       import: app/west.yml
-    # Подключаем графический модуль экрана YADS в отдельную папку
+    # Явно указываем полную ссылку на графический модуль YADS
     - name: zmk-dongle-screen
-      remote: janpfischer
+      url: https://github.com
       revision: main
-      path: zmk-dongle-screen # <--- ИСПРАВЛЕНО (было "config")
+      path: zmk-dongle-screen
   self:
     path: config
