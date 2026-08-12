@@ -2,15 +2,11 @@
 
 / {
     chosen {
-        // Указываем использовать виртуальную заглушку для опроса клавиш
         zmk,kscan = &mock_kscan;
-        // Подключаем виртуальную матрицу трансформации для слоев
         zmk,matrix-transform = &default_transform;
-        // Принудительно отдаем шину дисплея ZMK под контроль модуля YADS
         zmk,display = &st7789;
     };
 
-    // Заглушка сканирования матрицы клавиш
     mock_kscan: kscan {
         compatible = "zmk,kscan-mock";
         columns = <0>;
@@ -18,7 +14,6 @@
         events = <>;
     };
 
-    // Сетка раскладки для автоматического маппинга клавиш из klor.keymap
     default_transform: keymap_transform_0 {
         compatible = "zmk,matrix-transform";
         columns = <12>; 
@@ -33,17 +28,43 @@ RC(2,0) RC(2,1) RC(2,2) RC(2,3) RC(2,4) RC(2,5) RC(3,5) RC(3,6) RC(2,6) RC(2,7) 
     };
 };
 
-/* Активируем реальное имя SPI-шины контроллера XIAO BLE в ZMK v0.3 */
-&spi3 {
-    status = "okay";
+/* ==========================================================================
+ * РУЧНОЕ ОБЪЯВЛЕНИЕ PINCTRL ДЛЯ SPI ШИНЫ XIAO BLE (Исправление ошибки ZMK v0.3)
+ * ========================================================================== */
+&pinctrl {
+    spi0_default: spi0_default {
+        group1 {
+            /* Подключаем MOSI -> D9 (P0.06), SCK -> D10 (P0.13) */
+            psels = <NRF_PSEL(SPIM_MOSI, 0, 6)>,
+                    <NRF_PSEL(SPIM_SCK, 0, 13)>;
+        };
+    };
 
-    /* Инициализируем ноду самого дисплея YADS */
+    spi0_sleep: spi0_sleep {
+        group1 {
+            psels = <NRF_PSEL(SPIM_MOSI, 0, 6)>,
+                    <NRF_PSEL(SPIM_SCK, 0, 13)>;
+            low-power-enable;
+        };
+    };
+};
+
+/* Напрямую настраиваем аппаратный контроллер spi0 по требованиям Zephyr OS */
+&spi0 {
+    status = "okay";
+    pinctrl-0 = <&spi0_default>;
+    pinctrl-1 = <&spi0_sleep>;
+    pinctrl-names = "default", "sleep";
+    
+    // Аппаратный CS (Chip Select) экрана вешаем на пин D7 (P0.29)
+    cs-gpios = <&gpio0 29 GPIO_ACTIVE_LOW>;
+
     st7789: st7789@0 {
         compatible = "sitronix,st7789v";
         reg = <0>;
         spi-max-frequency = <24000000>;
         
-        /* Стандартные пины подключения экрана для Xiao BLE Dongle */
+        /* Управляющие пины экрана */
         cmd-data-gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;   /* D1 (P0.03) */
         reset-gpios = <&gpio0 2 GPIO_ACTIVE_LOW>;      /* D0 (P0.02) */
         width = <240>;
