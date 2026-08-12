@@ -7,10 +7,5 @@ manifest:
       remote: zmkfirmware
       revision: v0.3-branch
       import: app/west.yml
-    # Изолируем проект от секции remotes, принудительно передавая полный URL
-    - name: zmk-dongle-screen
-      url: https://github.com
-      revision: main
-      path: zmk-dongle-screen
   self:
     path: config
