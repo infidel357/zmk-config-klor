@@ -1,9 +1,11 @@
 #include <dt-bindings/zmk/matrix_transform.h>
+#include <physical_layouts.dtsi>   // Добавлено для ZMK Studio
 
 / {
     chosen {
         zmk,kscan = &mock_kscan;
         zmk,matrix-transform = &default_transform;
+        zmk,physical-layout = &physical_layout0;   // Добавлено
     };
 
     mock_kscan: kscan {
@@ -30,6 +32,73 @@
         compatible = "zmk,keymap-sensors";
         status = "okay";
         sensors = <&left_encoder &right_encoder>;
+    };
+
+    /* Новый узел: физический макет для ZMK Studio */
+    physical_layout0: physical_layout_0 {
+        compatible = "zmk,physical-layout";
+        display-name = "Klor Dongle";
+        transform = <&default_transform>;
+        kscan = <&mock_kscan>;
+
+        // Массив keys обязателен для Studio.
+        // Порядок записей ДОЛЖЕН совпадать с порядком RC(...) в default_transform.
+        // Формат: <&key_physical_attrs w h x y r rx ry>
+        // 100 = 1 "keyunit" (стандартная ширина/высота клавиши).
+        // Координаты подобраны для сетки 12 колонок × 4 ряда.
+        keys = <
+            // Ряд 0 (10 клавиш: 5 левых + 5 правых)
+            &key_physical_attrs 100 100   0   0 0 0 0
+            &key_physical_attrs 100 100 100   0 0 0 0
+            &key_physical_attrs 100 100 200   0 0 0 0
+            &key_physical_attrs 100 100 300   0 0 0 0
+            &key_physical_attrs 100 100 400   0 0 0 0
+            &key_physical_attrs 100 100 600   0 0 0 0
+            &key_physical_attrs 100 100 700   0 0 0 0
+            &key_physical_attrs 100 100 800   0 0 0 0
+            &key_physical_attrs 100 100 900   0 0 0 0
+            &key_physical_attrs 100 100 1000  0 0 0 0
+
+            // Ряд 1 (12 клавиш: 6 левых + 6 правых)
+            &key_physical_attrs 100 100   0 100 0 0 0
+            &key_physical_attrs 100 100 100 100 0 0 0
+            &key_physical_attrs 100 100 200 100 0 0 0
+            &key_physical_attrs 100 100 300 100 0 0 0
+            &key_physical_attrs 100 100 400 100 0 0 0
+            &key_physical_attrs 100 100 500 100 0 0 0
+            &key_physical_attrs 100 100 600 100 0 0 0
+            &key_physical_attrs 100 100 700 100 0 0 0
+            &key_physical_attrs 100 100 800 100 0 0 0
+            &key_physical_attrs 100 100 900 100 0 0 0
+            &key_physical_attrs 100 100 1000 100 0 0 0
+            &key_physical_attrs 100 100 1100 100 0 0 0
+
+            // Ряд 2 (14 клавиш: 6 левых + 2 энкодера + 6 правых)
+            &key_physical_attrs 100 100   0 200 0 0 0
+            &key_physical_attrs 100 100 100 200 0 0 0
+            &key_physical_attrs 100 100 200 200 0 0 0
+            &key_physical_attrs 100 100 300 200 0 0 0
+            &key_physical_attrs 100 100 400 200 0 0 0
+            &key_physical_attrs 100 100 500 200 0 0 0
+            &key_physical_attrs 100 100 550 200 0 0 0   // левый энкодер (RC(3,5))
+            &key_physical_attrs 100 100 650 200 0 0 0   // правый энкодер (RC(3,6))
+            &key_physical_attrs 100 100 600 200 0 0 0
+            &key_physical_attrs 100 100 700 200 0 0 0
+            &key_physical_attrs 100 100 800 200 0 0 0
+            &key_physical_attrs 100 100 900 200 0 0 0
+            &key_physical_attrs 100 100 1000 200 0 0 0
+            &key_physical_attrs 100 100 1100 200 0 0 0
+
+            // Ряд 3 (8 клавиш: 4 левых + 4 правых)
+            &key_physical_attrs 100 100 100 300 0 0 0
+            &key_physical_attrs 100 100 200 300 0 0 0
+            &key_physical_attrs 100 100 300 300 0 0 0
+            &key_physical_attrs 100 100 400 300 0 0 0
+            &key_physical_attrs 100 100 700 300 0 0 0
+            &key_physical_attrs 100 100 800 300 0 0 0
+            &key_physical_attrs 100 100 900 300 0 0 0
+            &key_physical_attrs 100 100 1000 300 0 0 0
+        >;
     };
 
     default_transform: keymap_transform_0 {
