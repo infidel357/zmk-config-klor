@@ -7,8 +7,6 @@ if SHIELD_KLOR_LEFT
     config ZMK_KEYBOARD_NAME
         default "KLOR"
 
-    config ZMK_SPLIT_BLE_ROLE_CENTRAL
-        default y
 endif
 
 # Настройки для беспроводного донгла YADS
