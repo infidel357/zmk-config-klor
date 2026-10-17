@@ -4,7 +4,7 @@
 / {
     chosen {
         zmk,kscan = &mock_kscan;
-        zmk,matrix-transform = &default_transform;
+        // zmk,matrix-transform = &default_transform;  <-- ЭТУ СТРОКУ НУЖНО УДАЛИТЬ
         zmk,physical-layout = &physical_layout0;
     };
 
@@ -15,7 +15,6 @@
         events = <>;
     };
 
-    /* Dummy encoders: only needed as phandle targets for the sensors node. */
     left_encoder: encoder_left {
         compatible = "alps,ec11";
         status = "disabled";
@@ -26,8 +25,6 @@
         status = "disabled";
     };
 
-    /* Required for ZMK_KEYMAP_HAS_SENSORS = 1, so central.c
-       subscribes to the BLE sensor-state characteristic. */
     sensors: sensors {
         compatible = "zmk,keymap-sensors";
         status = "okay";
@@ -36,7 +33,7 @@
 
     physical_layout0: physical_layout_0 {
         compatible = "zmk,physical-layout";
-        status = "okay";               /* <-- ДОБАВЛЕНО */
+        status = "okay";
         display-name = "Klor Dongle";
         transform = <&default_transform>;
         kscan = <&mock_kscan>;
