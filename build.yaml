@@ -10,6 +10,8 @@ include:
 
   - board: seeeduino_xiao_ble
     shield: klor_dongle dongle_screen
+    snippet: studio-rpc-usb-uart
+    cmake-args: -DCONFIG_ZMK_STUDIO=y
     artifact-name: klor_dongle-seeeduino_xiao_ble
 
   - board: nice_nano_v2
