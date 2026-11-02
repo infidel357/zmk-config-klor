@@ -1,8 +1,3 @@
-Готово. Я убрал &studio_unlock из служебного слоя (Layer 4), заменив его на &trans. Теперь при сборке периферийных половин (klor_right и klor_left) не будет ошибки, так как этот файл больше не требует наличия ZMK Studio в прошивке.
-
-Вот полный и готовый к использованию файл config/klor.keymap:
-
-```dts
 //                               █         █    █            ▄▄▄▀▀▀▀▀▀▄▄▄        █▀▀▀▀▀▀▀▀▀▀█
 //                               █        █     █          ▄▀            ▀▄      █          █
 //                               █       █      █        ▄▀                ▀▄    █          █
@@ -31,25 +26,34 @@
 
 / {
     behaviors {
-        // Tap-Dance для клавиши M:
-        //   1 нажатие  -> M
-        //   2 нажатия  -> ] (в русской раскладке это твёрдый знак "ъ")
+        // Tap-Dance для клавиши M: 1 нажатие = M, 2 нажатия = Ъ (])
         td_m: tap_dance_m {
             compatible = "zmk,behavior-tap-dance";
             #binding-cells = <0>;
             tapping-term-ms = <200>;
             bindings = <&kp M>, <&kp RBRC>;
         };
+
+        // Макрос для смены языка (Win+Space)
+        // ZMK не умеет отправлять две клавиши через пробел, поэтому нужен макрос
+        lang_sw: lang_switch {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = 
+                <&macro_press &kp LGUI>,
+                <&macro_tap &kp SPACE>,
+                <&macro_release &kp LGUI>;
+        };
     };
 
     combos {
         compatible = "zmk,combos";
 
-        // Комбо Q+W для переключения языка (Win+Space)
+        // Комбо Q+E (позиции 0 и 2)
         combo_lang {
-            timeout-ms = <50>;
-            key-positions = <0 1>;
-            bindings = <&kp LGUI SPACE>;
+            timeout-ms = <100>;
+            key-positions = <0 2>;
+            bindings = <&lang_sw>;
         };
     };
 
@@ -127,4 +131,3 @@
         };
     };
 };
-```
