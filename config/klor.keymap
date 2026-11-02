@@ -1,20 +1,6 @@
-Отлично, теперь всё встало на свои места! Я обновил большие пальцы (тамбы) в точном соответствии с вашим описанием:
+Готово. Я убрал &studio_unlock из служебного слоя (Layer 4), заменив его на &trans. Теперь при сборке периферийных половин (klor_right и klor_left) не будет ошибки, так как этот файл больше не требует наличия ZMK Studio в прошивке.
 
-Левая рука (слева направо):
-
-1. Alt
-2. Win
-3. Tab (а при удержании — Слой 2: Цифры)
-4. Space (а при удержании — Слой 1: Символы)
-
-Правая рука (слева направо):
-
-1. Слой 4 (EXTRA) — &mo 4
-2. Enter
-3. Backspace (а при удержании — Слой 3: F-клавиши)
-4. Delete
-
-Теперь переключение слоев работает именно так, как вы задумали. Вот готовый файл:
+Вот полный и готовый к использованию файл config/klor.keymap:
 
 ```dts
 //                               █         █    █            ▄▄▄▀▀▀▀▀▀▄▄▄        █▀▀▀▀▀▀▀▀▀▀█
@@ -134,7 +120,7 @@
             bindings = <
                 &bt BT_CLR &trans  &trans  &trans       &trans                         &trans   &trans       &trans     &trans   &bt BT_CLR
 &ext_power EP_TOG &bt BT_NXT &trans  &trans  &trans       &trans                         &trans   &trans       &trans     &bt BT_NXT&trans      &trans
-&rgb_ug RGB_EFF &bt BT_PRV &trans  &trans  &studio_unlock&trans   &trans    &trans    &bt BT_PRV&trans       &trans     &trans   &trans        &trans
+&rgb_ug RGB_EFF &bt BT_PRV &trans  &trans  &trans       &trans   &trans    &trans    &bt BT_PRV&trans       &trans     &trans   &trans        &trans
                               &trans     &trans       &trans     &trans     &trans     &trans     &trans     &trans
             >;
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp C_PREV C_NEXT>;
