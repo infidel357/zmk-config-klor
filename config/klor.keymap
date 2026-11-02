@@ -48,10 +48,11 @@
     combos {
         compatible = "zmk,combos";
 
-        // Комбо Q+E (позиции 0 и 2)
+        // Комбо Q+E (позиции 0 и 2) только для базового слоя
         combo_lang {
             timeout-ms = <100>;
             key-positions = <0 2>;
+            layers = <0>;
             bindings = <&lang_sw>;
         };
     };
@@ -70,7 +71,7 @@
 &mt LCTRL ESC   &kp Z  &kp X  &kp C      &kp V        &kp B      &kp C_MUTE &kp C_PP  &kp N    &td_m        &kp COMMA  &kp DOT  &kp SLASH      &kp BSLH
                               &kp LALT   &kp LGUI   &lt 2 TAB  &lt 1 SPACE&mo 4      &kp ENTER  &lt 3 BSPC &kp DEL
             >;
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp C_PREV C_NEXT>;
+            sensor-bindings = <&inc_dec_cp C_VOL_UP C_VOL_DN &inc_dec_cp C_PREV C_NEXT>;
         };
 
         // ==========================================
@@ -84,7 +85,7 @@
 &kp LCTRL       &kp TILDE &kp BSLH  &kp SLASH &kp QMARK    &kp RPAR    &trans    &trans    &kp N    &kp M        &kp COMMA  &kp DOT  &kp SLASH      &kp BSLH
                               &trans     &trans       &trans     &trans     &trans     &trans     &trans     &trans
             >;
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp C_PREV C_NEXT>;
+            sensor-bindings = <&inc_dec_cp C_VOL_UP C_VOL_DN &inc_dec_cp C_PREV C_NEXT>;
         };
 
         // ==========================================
@@ -98,7 +99,7 @@
 &kp LSHFT       &kp DLLR  &kp EXCL  &kp TILDE  &kp BSLH     &kp UNDER  &trans    &trans    &kp KP_N1&kp KP_N2    &kp KP_N3  &kp KP_N0  &kp KP_DOT     &trans
                               &trans     &trans       &trans     &trans     &trans     &trans     &trans     &trans
             >;
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp C_PREV C_NEXT>;
+            sensor-bindings = <&inc_dec_cp C_VOL_UP C_VOL_DN &inc_dec_cp C_PREV C_NEXT>;
         };
 
         // ==========================================
@@ -112,7 +113,7 @@
 &kp KP_NUM      &kp F10   &kp F1  &kp F2  &kp F3       &kp PAUSE_BREAK&trans    &trans    &trans   &trans       &trans     &trans   &trans        &mo 4
                               &trans     &trans       &trans     &trans     &trans     &trans     &trans     &trans
             >;
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp C_PREV C_NEXT>;
+            sensor-bindings = <&inc_dec_cp C_VOL_UP C_VOL_DN &inc_dec_cp C_PREV C_NEXT>;
         };
 
         // ==========================================
@@ -126,7 +127,7 @@
 &rgb_ug RGB_EFF &bt BT_PRV &trans  &trans  &trans       &trans   &trans    &trans    &bt BT_PRV&trans       &trans     &trans   &trans        &trans
                               &trans     &trans       &trans     &trans     &trans     &trans     &trans     &trans
             >;
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp C_PREV C_NEXT>;
+            sensor-bindings = <&inc_dec_cp C_VOL_UP C_VOL_DN &inc_dec_cp C_PREV C_NEXT>;
         };
     };
 };
