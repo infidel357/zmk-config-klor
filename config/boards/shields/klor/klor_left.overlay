@@ -19,4 +19,5 @@
 
 &left_encoder {
 	status = "okay";
+	steps = <24>; /* <--- ДОБАВЛЕНА ЭТА СТРОКА */
 };
