@@ -91,10 +91,10 @@
         lower_layer {
             label = "LOWER";
             bindings = <
-           &kp NUMBER_8           &kp LS(NUMBER_7)  &kp LS(NUMBER_8)  &kp LS(NUMBER_9)  &kp LESS_THAN                  &kp UP     &kp DOWN   &kp LEFT   &kp RIGHT      &kp DEL
-&kp PLUS   &kp RIGHT_PARENTHESIS  &kp LS(NUMBER_4)  &kp LS(NUMBER_5)  &kp LS(NUMBER_6)  &kp DOT                        &kp MINUS  &kp RSHFT  &kp RCTRL  &kp RIGHT_ALT  &kp RGUI   &none
-&kp UNDER  &kp PIPE               &kp LS(NUMBER_1)  &kp LS(NUMBER_2)  &kp LS(NUMBER_3)  &kp SLASH      &trans  &trans  &none      &none      &kp COMMA  &kp DOT        &kp SLASH  &kp BSLH
-                                                    &trans            &trans            &trans         &trans  &trans  &trans     &trans     &trans
+           &kp NUMBER_8           &kp LS(NUMBER_7)  &kp LS(NUMBER_8)  &kp LS(NUMBER_9)  &kp LESS_THAN                  &none     &kp UP_ARROW  &none            &none          &kp DEL
+&kp PLUS   &kp RIGHT_PARENTHESIS  &kp LS(NUMBER_4)  &kp LS(NUMBER_5)  &kp LS(NUMBER_6)  &kp DOT                        &kp LEFT  &kp DOWN      &kp RIGHT_ARROW  &kp RIGHT_ALT  &kp RGUI   &none
+&kp UNDER  &kp PIPE               &kp LS(NUMBER_1)  &kp LS(NUMBER_2)  &kp LS(NUMBER_3)  &kp SLASH      &trans  &trans  &none     &none         &kp COMMA        &kp DOT        &kp SLASH  &kp BSLH
+                                                    &trans            &trans            &trans         &trans  &trans  &trans    &trans        &trans
             >;
 
             sensor-bindings = <&inc_dec_cp C_VOL_UP C_VOL_DN &inc_dec_cp C_PREV C_NEXT>;
