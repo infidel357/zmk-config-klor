@@ -4,16 +4,13 @@ manifest:
       url-base: https://github.com/zmkfirmware
     - name: infidel357
       url-base: https://github.com/infidel357
-
   projects:
     - name: zmk
       remote: zmkfirmware
       revision: v0.3-branch
       import: app/west.yml
-
     - name: zmk-dongle-screen
       remote: infidel357
       revision: main
-
   self:
     path: config
