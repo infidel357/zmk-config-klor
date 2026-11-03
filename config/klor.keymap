@@ -1,8 +1,21 @@
+//                               █         █    █            ▄▄▄▀▀▀▀▀▀▄▄▄        █▀▀▀▀▀▀▀▀▀▀█
+//                               █        █     █          ▄▀            ▀▄      █          █
+//                               █       █      █        ▄▀                ▀▄    █          █
+//                               █      █       █        █                  █    █          █
+//                               █     █        █       █                    █   █          █
+//                               █    █         █       █                    █   █▄▄▄▄▄▄▄▄▄▄█
+//                               █   █ █        █       █                    █   █      █
+//                               █  █   █       █        █                  █    █       █
+//                               █ █     █      █        ▀▄                ▄▀    █        █
+//                               ██       █     █          ▀▄            ▄▀      █         █
+//                               █         █    █▄▄▄▄▄▄▄▄    ▀▀▀▄▄▄▄▄▄▀▀▀        █          █
+//
+// ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/ext_power.h>
 #include <dt-bindings/zmk/keys.h>
-#include <dt-bindings/zmk/rgb.h>
 
 #define BASE   0
 #define LOWER  1
@@ -12,26 +25,41 @@
 
 / {
     behaviors {
-        // Tap-Dance для клавиши M:
-        //   1 нажатие  -> M
-        //   2 нажатия  -> ] (в русской раскладке это твёрдый знак "ъ")
+        // Tap-Dance для клавиши M: 1 нажатие = M, 2 нажатия = Ъ (])
+
         td_m: tap_dance_m {
             compatible = "zmk,behavior-tap-dance";
             #binding-cells = <0>;
             tapping-term-ms = <200>;
             bindings = <&kp M>, <&kp RBRC>;
         };
+
+        // Макрос для смены языка (Win+Space)
+
+        lang_sw: lang_switch {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&macro_press &kp LGUI>,
+                <&macro_tap &kp SPACE>,
+                <&macro_release &kp LGUI>;
+        };
     };
 
     combos {
         compatible = "zmk,combos";
 
-        // Комбо Q+W для переключения языка (Win+Space)
+        // Комбо Q+E (позиции 0 и 2) только для базового слоя
+
         combo_lang {
-            timeout-ms = <50>;
-            key-positions = <0 1>;
-            bindings = <&kp LGUI SPACE>;
+            timeout-ms = <100>;
+            key-positions = <0 2>;
+            layers = <0>;
+            bindings = <&lang_sw>;
         };
+    };
+
+    macros {
     };
 
     keymap {
@@ -40,71 +68,86 @@
         // ==========================================
         // Layer 0 (BASE)
         // ==========================================
+
         base_layer {
             label = "BASE";
             bindings = <
-                &kp Q  &kp W  &kp E      &kp R        &kp T                          &kp Y    &kp U        &kp I      &kp O    &kp P
-&kp LSHFT       &kp A  &kp S  &kp D      &kp F        &kp G                          &kp H    &kp J        &kp K      &kp L    &kp SEMICOLON  &kp RALT
-&mt LCTRL ESC   &kp Z  &kp X  &kp C      &kp V        &kp B      &trans    &trans    &kp N    &td_m        &kp COMMA  &kp DOT  &kp SLASH      &kp BSLH
-                              &kp LALT   &kp LGUI   &lt 2 TAB  &lt 1 SPACE&mo 4      &kp ENTER  &lt 3 BSPC &kp DEL
+               &kp Q  &kp W  &kp E     &kp R     &kp T                             &kp Y      &kp U       &kp I      &kp O    &kp P
+&kp LSHFT      &kp A  &kp S  &kp D     &kp F     &kp G                             &kp H      &kp J       &kp K      &kp L    &kp SEMICOLON  &kp LEFT_BRACKET
+&mt LCTRL ESC  &kp Z  &kp X  &kp C     &kp V     &kp B      &kp C_MUTE   &kp C_PP  &kp N      &td_m       &kp COMMA  &kp DOT  &kp SLASH      &kp SQT
+                             &kp LALT  &kp LGUI  &lt 2 TAB  &lt 1 SPACE  &mo 2     &kp ENTER  &lt 3 BSPC  &kp DEL
             >;
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp C_PREV C_NEXT>;
+
+            // Правый энкодер: направления поменяны местами (C_NEXT / C_PREV)
+            sensor-bindings = <&inc_dec_cp C_VOL_UP C_VOL_DN &inc_dec_cp C_NEXT C_PREV>;
         };
 
         // ==========================================
-        // Layer 1 (LOWER) - Символы
+        // Layer 1 (SYMBOLS)
         // ==========================================
+
         lower_layer {
-            label = "LOWER";
+            label = "SYMBOLS";
             bindings = <
-                &kp GRAVE &kp EXCL &kp AT   &kp HASH     &kp DLLR                       &trans   &trans       &trans     &trans   &trans
-&kp LSHFT       &kp PRCNT &kp CARET&kp AMPS &kp ASTRK    &kp LPAR                       &trans   &trans       &kp RSHFT  &kp RCTRL&kp LALT      &kp RGUI
-&kp LCTRL       &kp RPAR   &kp UNDER&kp PLUS &kp LBRC     &kp RBRC    &trans    &trans    &trans   &trans       &trans     &trans   &trans        &trans
-                              &trans     &trans       &trans     &trans     &trans     &trans     &trans     &trans
+           &kp NUMBER_8           &kp LS(NUMBER_7)  &kp LS(NUMBER_8)  &kp LS(NUMBER_9)  &kp LESS_THAN                  &none     &kp UP_ARROW  &none            &none          &kp DEL
+&kp PLUS   &kp RIGHT_PARENTHESIS  &kp LS(NUMBER_4)  &kp LS(NUMBER_5)  &kp LS(NUMBER_6)  &kp DOT                        &kp LEFT  &kp DOWN      &kp RIGHT_ARROW  &kp RIGHT_ALT  &kp RGUI   &none
+&kp UNDER  &kp PIPE               &kp LS(NUMBER_1)  &kp LS(NUMBER_2)  &kp LS(NUMBER_3)  &kp SLASH      &trans  &trans  &none     &none         &kp COMMA        &kp DOT        &kp SLASH  &kp BSLH
+                                                    &trans            &trans            &trans         &trans  &trans  &trans    &trans        &trans
             >;
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp C_PREV C_NEXT>;
+
+            // Правый энкодер: каретка влево/вправо
+            sensor-bindings = <&inc_dec_cp C_VOL_UP C_VOL_DN &inc_dec_cp LEFT RIGHT>;
         };
 
         // ==========================================
-        // Layer 2 (RAISE) - Numpad
+        // Layer 2 (NUMBERS)
         // ==========================================
+
         raise_layer {
-            label = "RAISE";
+            label = "NUMBERS";
             bindings = <
-                &kp ASTRK &kp KP_N8 &kp LPAR &kp KP_N9     &kp COMMA                      &kp KP_N7 &kp KP_N8 &kp KP_N9 &kp KP_PLUS &trans
-&kp PRCNT       &kp KP_N5 &kp CARET&kp KP_N6     &kp DOT                        &kp KP_N4 &kp KP_N5 &kp KP_N6 &kp KP_MINUS&trans
-&kp EXCL        &kp KP_N2 &kp AT   &kp KP_N3     &kp SLASH                      &kp KP_N1 &kp KP_N2 &kp KP_N3 &kp KP_MULTIPLY&trans
-                              &trans     &trans       &trans     &trans     &trans     &trans     &kp KP_N0 &trans
+           &kp LSHFT  &kp N7        &kp N8        &kp N9        &kp RPAR                     &kp KP_N7       &kp UP_ARROW  &kp KP_N9        &kp KP_PLUS      &kp KP_MINUS
+&kp LSHFT  &kp N0     &kp NUMBER_4  &kp N5        &kp NUMBER_6  &kp EXCL                     &kp LEFT_ARROW  &kp DOWN      &kp RIGHT_ARROW  &kp KP_MULTIPLY  &kp KP_DIVIDE  &kp LSHFT
+&kp DLLR   &kp EXCL   &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp DOT   &trans  &kp KP_N1  &kp KP_N2       &kp KP_N3     &kp KP_N0        &kp KP_DOT       &trans         &trans
+                                    &trans        &trans        &trans    &trans  &trans     &trans          &trans
             >;
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp C_PREV C_NEXT>;
+
+            // Правый энкодер: каретка влево/вправо
+            sensor-bindings = <&inc_dec_cp C_VOL_UP C_VOL_DN &inc_dec_cp LEFT RIGHT>;
         };
 
         // ==========================================
-        // Layer 3 (ADJUST) - F-клавиши
+        // Layer 3 (ADJUST)
         // ==========================================
+
         adjust_layer {
             label = "ADJUST";
             bindings = <
-                &kp F12   &kp F7  &kp F8  &kp F9       &kp PSCRN                      &trans   &trans       &trans     &trans   &trans
-&kp CLCK        &kp F11   &kp F4  &kp F5  &kp F6       &kp SLCK                       &trans   &trans       &kp RSHFT  &kp RCTRL&kp LALT      &kp RGUI
-&kp KP_NUM      &kp F10   &kp F1  &kp F2  &kp F3       &kp PAUSE_BREAK&trans    &trans    &trans   &trans       &trans     &trans   &trans        &trans
-                              &trans     &trans       &trans     &trans     &trans     &trans     &kp C_NEXT &kp C_PP
+           &kp F12  &kp F7  &kp F8  &kp F9  &kp PSCRN                        &trans  &trans  &trans     &trans     &trans
+&kp CLCK   &kp F11  &kp F4  &kp F5  &kp F6  &kp SLCK                         &trans  &trans  &kp RSHFT  &kp RCTRL  &kp LALT  &kp RGUI
+&kp LCTRL  &kp F10  &kp F1  &kp F2  &kp F3  &kp PAUSE_BREAK  &trans  &trans  &trans  &trans  &trans     &trans     &trans    &mo 4
+                            &trans  &trans  &trans           &trans  &trans  &trans  &trans  &trans
             >;
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp C_PREV C_NEXT>;
+
+            // Правый энкодер: каретка влево/вправо
+            sensor-bindings = <&inc_dec_cp C_VOL_UP C_VOL_DN &inc_dec_cp LEFT RIGHT>;
         };
 
         // ==========================================
-        // Layer 4 (EXTRA) - Служебный слой
+        // Layer 4 (EXTRA)
         // ==========================================
+
         extra_layer {
             label = "EXTRA";
             bindings = <
-                &bt BT_CLR &trans  &trans  &trans       &trans                         &trans   &trans       &trans     &trans   &bt BT_CLR
-&ext_power EP_TOG &bt BT_NXT &trans  &trans  &trans       &trans                         &trans   &trans       &trans     &bt BT_NXT&trans      &trans
-&rgb_ug RGB_EFF &bt BT_PRV &trans  &trans  &trans       &trans   &trans    &trans    &bt BT_PRV&trans       &trans     &trans   &trans        &trans
-                              &trans     &trans       &trans     &trans     &trans     &trans     &trans     &trans
+           &bt BT_CLR  &trans      &trans      &trans      &ext_power EP_TOG                  &trans  &trans  &trans  &trans  &none
+&none      &none       &bt BT_PRV  &bt BT_PRV  &bt BT_NXT  &trans                             &trans  &trans  &trans  &none   &trans  &trans
+&kp LCTRL  &none       &bt BT_NXT  &trans      &trans      &trans             &trans  &trans  &none   &trans  &trans  &trans  &trans  &trans
+                                   &bt BT_CLR  &trans      &trans             &trans  &trans  &trans  &trans  &trans
             >;
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp C_PREV C_NEXT>;
+
+            // Правый энкодер: каретка влево/вправо
+            sensor-bindings = <&inc_dec_cp C_VOL_UP C_VOL_DN &inc_dec_cp LEFT RIGHT>;
         };
     };
 };
