@@ -7,7 +7,7 @@
 
 ***
 
-🇬🇧 [English](README.md) | 🇷🇺 Русский
+🇬🇧 [English](README.en.md) | 🇷🇺 Русский
 
 # KLOR — конфиг ZMK (форк с экраном на донгле и ZMK Studio)
 
