@@ -4,49 +4,48 @@
   <img alt="KLOR logo font" src="/docs/images/klor-font-logo-bright.svg">
 </picture>
 
+
+***
+
+🇬🇧 [English](README.md) | 🇷🇺 Русский
+
+# KLOR — конфиг ZMK (форк с экраном на донгле и ZMK Studio)
+
+Конфигурация ZMK для сплит-клавиатуры **KLOR**, расширенная **донглом на Seeed XIAO BLE** с кастомной сборкой **YADS (zmk-dongle-screen)**: idle-картинка, поддержка ZMK Studio и корректное отображение раскладки KLOR в Studio.
+
+- Оригинальный QMK-конфиг: [GEIGEIGEIST/KLOR](https://github.com/GEIGEIGEIST/KLOR)
+- Файлы железа и гайд по сборке: [GEIGEIGEIST/KLOR-hardware](https://github.com/GEIGEIGEIST/KLOR-hardware)
+- Оригинальный dongle-screen: [janpfischer/zmk-dongle-screen](https://github.com/janpfischer/zmk-dongle-screen)
+
 ---
 
-```markdown
-# KLOR — ZMK config (fork with dongle screen & ZMK Studio)
+## ✨ Чем отличается от оригинального KLOR
 
-ZMK configuration for the **KLOR** split keyboard, extended with a
-**Seeed XIAO BLE dongle** running a custom **YADS (zmk-dongle-screen)** build:
-idle pixel-art face, ZMK Studio support, and correct KLOR layout in Studio.
+### 1. Донгл с экраном (форк YADS)
 
-- Original QMK config: [GEIGEIGEIST/KLOR](https://github.com/GEIGEIGEIST/KLOR)
-- Hardware files & build guide: [GEIGEIGEIST/KLOR-hardware](https://github.com/GEIGEIGEIST/KLOR)
-- Upstream dongle screen: [janpfischer/zmk-dongle-screen](https://github.com/janpfischer/zmk-dongle-screen)
+- Плата: `seeeduino_xiao_ble`
+- Щит: `klor_dongle dongle_screen`
+- Сниппет: `studio-rpc-usb-uart`
+- Форк `zmk-dongle-screen`: **[infidel357/zmk-dongle-screen](https://github.com/infidel357/zmk-dongle-screen)**
 
----
+### 2. Idle-картинка
 
-## ✨ What's different from upstream KLOR
+Через **20 секунд** бездействия появляется жёлтая пиксельная мордочка, висит **30 секунд**, затем экран плавно гаснет.
 
-### 1. Dongle with screen (YADS fork)
+Конечный автомат в `brightness.c`:
 
-- Board: `seeeduino_xiao_ble`
-- Shield: `klor_dongle dongle_screen`
-- Snippet: `studio-rpc-usb-uart`
-- Fork of `zmk-dongle-screen`: **`infidel357/zmk-dongle-screen`**
-
-### 2. Idle pixel-art face
-
-After **20 s** of inactivity a yellow pixel-art face appears, stays for
-**30 s**, then the screen fades to black.
-
-State machine in `brightness.c`:
-
-```
-ACTIVE  ──(20 s idle)──▶  IDLE_IMAGE  ──(30 s)──▶  BLANKED
-   ▲                          │
-   └────── activity ──────────┘
+```text
+ACTIVE  ──(20 с простоя)──▶  IDLE_IMAGE  ──(30 с)──▶  BLANKED
+   ▲                            │
+   └──────── активность ────────┘
 ```
 
-New files in the dongle-screen fork:
+Новые файлы в форке dongle-screen:
 
-- `src/assets/idle_face.c` — 276×236 `LV_IMG_CF_INDEXED_1BIT` (yellow + black)
-- `src/widgets/custom_idle_image.c` / `.h` — LVGL widget
+- `src/assets/idle_face.c` — 276×236 `LV_IMG_CF_INDEXED_1BIT` (жёлтый + чёрный)
+- `src/widgets/custom_idle_image.c` / `.h` — виджет LVGL
 
-Kconfig options:
+Опции Kconfig:
 
 ```kconfig
 CONFIG_DONGLE_SCREEN_IDLE_TIMEOUT_S=20
@@ -56,119 +55,105 @@ CONFIG_DONGLE_SCREEN_IDLE_IMAGE_BLANK_DELAY_S=30
 
 ### 3. ZMK Studio
 
-Enabled on the dongle, **locking disabled** — no `&studio_unlock` needed:
+Включена на донгле, **блокировка отключена** — комбо `&studio_unlock` не нужно:
 
 ```kconfig
 CONFIG_ZMK_STUDIO=y
 CONFIG_ZMK_STUDIO_LOCKING=n
 ```
 
-### 4. KLOR in ZMK Studio
+### 4. KLOR в ZMK Studio
 
-`klor_dongle.overlay` contains a `physical_layout0` with a 44-element `keys`
-array, so thumb clusters are drawn **angled** (taken from `vial.json`).
-
----
-
-## 🚀 How to build
-
-1. **Fork** this repo.
-2. **Clone** your fork locally.
-3. Edit `config/klor.keymap` (keycodes: [ZMK docs](https://zmk.dev/docs/codes)).
-4. **Push** to your fork.
-5. On GitHub → **Actions** → wait for the build → download `firmware.zip`.
-6. Flash:
-   - **Left half** → `klor_left-nice_nano_v2-zmk.uf2`
-   - **Right half** → `klor_right-nice_nano_v2-zmk.uf2`
-   - **Dongle** → `klor_dongle-seeeduino_xiao_ble-zmk.uf2`
-     (reset twice → drag'n'drop; **do a full settings reset on first flash**)
-7. Pair halves and host with the dongle; open ZMK Studio — no unlock combo needed.
-
-> ⚠️ The dongle build uses `snippet: studio-rpc-usb-uart` and
-> `cmake-args: -DCONFIG_ZMK_STUDIO=y` — see `config/build.yaml`.
+В `klor_dongle.overlay` добавлен `physical_layout0` с массивом `keys` из 44 элементов — тамбы рисуются **с наклоном** (взято из `vial.json`).
 
 ---
 
-## 📁 Repo layout (modified parts)
+## 🚀 Как собрать и прошить
 
-```
-config/
-├── west.yml                     # dongle-screen → infidel357 fork
-├── build.yaml                   # dongle: snippet + studio cmake-args
-├── klor_dongle.conf             # idle image, studio, BLE, LVGL pool
-├── klor.keymap                  # 5 layers, encoder overrides, tap-dance, combo
-└── boards/shields/klor/
-    └── klor_dongle.overlay      # physical_layout0 (angled thumbs for Studio)
+### Шаг 1. Форк и клонирование
+
+1. Нажми **Fork** на странице этого репозитория (создай свою копию).
+2. Клонируй форк локально:
+
+```bash
+git clone https://github.com/<твой-ник>/zmk-config-klor.git
+cd zmk-config-klor
 ```
 
-Dongle-screen fork (`infidel357/zmk-dongle-screen`) adds:
+### Шаг 2. Правка раскладки (по желанию)
 
-```
-boards/shields/dongle_screen/
-├── src/assets/idle_face.c
-├── src/widgets/custom_idle_image.{c,h}
-├── src/brightness.c             # ACTIVE → IDLE_IMAGE → BLANKED
-├── src/custom_status_screen.c   # widget init
-├── CMakeLists.txt
-└── Kconfig.defconfig
-```
+Отредактируй `config/klor.keymap` — коды клавиш смотри в [документации ZMK](https://zmk.dev/docs/codes).
 
----
+### Шаг 3. Сборка через GitHub Actions
 
-## ⌨️ Keymap highlights
+1. Закоммить и запушь изменения:
 
-- **Layers**: `BASE`, `SYMBOLS`, `NUMBERS`, `ADJUST`, `EXTRA`
-- **Left encoder** (all layers): `C_VOL_UP` / `C_VOL_DN`
-- **Right encoder on BASE**: `C_NEXT` / `C_PREV` (next track first)
-- **Right encoder on other layers**: `&kp LEFT` / `&kp RIGHT` (cursor)
-- **Tap-dance on `M`**: 1 tap = `M`, 2 taps = `]` (`Ъ` in RU layout)
-- **Combo `Q + E`**: language switch (`Win+Space`)
-
----
-
-## 🐛 Known issues
-
-- **Left/right halves**: encoder on the *secondary* half doesn't work — ZMK limitation.
-- **Pixart PAW3204 trackball**: not implemented (needs a custom driver).
-- **Dongle screen artifact**: ST7789V grabs garbage in the last line → image
-  reduced to **276×236** and shifted with `lv_obj_align(..., -12)`.
-- **Idle timer reset by BLE**: `brightness_wake_screen_on_reconnect()`
-  called `record_activity_locked(false)` on every packet → call is commented out.
-
----
-
-## 🛠️ Rebuilding the dongle from scratch
-
-1. Fork `janpfischer/zmk-dongle-screen` → `infidel357/zmk-dongle-screen`.
-2. Apply the dongle-screen changes listed above.
-3. In `config/west.yml` point the remote to `infidel357`.
-4. Add the Kconfig block to `klor_dongle.conf`.
-5. Add `physical_layout0` to `klor_dongle.overlay`.
-6. Add `snippet` + `cmake-args` for the dongle in `build.yaml`.
-7. Push → GitHub Actions → flash with settings reset.
-
----
-
-## 📝 License
-
-MIT — same as ZMK and YADS.
+```bash
+git add .
+git commit -m "my keymap"
+git push
 ```
 
----
+2. На странице своего форка открой вкладку **Actions**.
+3. Дождись окончания сборки (зелёная галочка).
+4. Скачай артефакт **`firmware.zip`** (кнопка внизу страницы сборки).
 
-### Что я поменял по сравнению с оригиналом
+> 💡 Если Actions не запустились автоматически — зайди в **Actions → Build → Run workflow**.
 
-| Было | Стало |
+### Шаг 4. Прошивка
+
+В архиве `firmware.zip` три файла:
+
+| Файл | Куда прошивать |
 |---|---|
-| «Here you can find the QMK config…» | Явные ссылки + список отличий форка |
-| Только 2 файла прошивки (left/right) | Добавлен **dongle** и предупреждение о сбросе настроек |
-| Нет упоминания ZMK Studio | Отдельный раздел + `CONFIG_ZMK_STUDIO_LOCKING=n` |
-| Нет описания раскладки | Секция **Keymap highlights** |
-| Known issues только про энкодер и трекбол | Добавлены артефакт экрана и сброс idle-таймера |
-| Нет структуры репо | Дерево `config/` + форк донгла |
-| Нет инструкции «с нуля» | Раздел **Rebuilding the dongle** |
+| `klor_left-nice_nano_v2-zmk.uf2` | левая половина |
+| `klor_right-nice_nano_v2-zmk.uf2` | правая половина |
+| `klor_dongle-seeeduino_xiao_ble-zmk.uf2` | донгл (XIAO BLE) |
 
-Если хочешь — могу ещё:
-- добавить **бейджи** (build status, ZMK version, license),
-- сделать **английскую + русскую** версию в одном файле (`README.md` / `README.ru.md`),
-- вынести картинку idle-мордочки в README как превью (нужен файл `docs/idle_face.png`).
+**Порядок прошивки:**
+
+1. **Левая половина**: подключи к ПК, нажми **Reset** дважды — появится USB-накопитель. Перетащи `klor_left-...uf2` на него.
+2. **Правая половина**: то же самое с `klor_right-...uf2`.
+3. **Донгл**: подключи XIAO BLE, нажми **Reset** дважды, перетащи `klor_dongle-...uf2`.
+
+> ⚠️ **Важно для донгла:** при первой прошивке обязательно сделай **сброс настроек** (settings reset).
+
+### Шаг 5. Сопряжение
+
+1. Включи донгл — на экране появится статус.
+2. Включи левую и правую половины — они автоматически сопрягутся с донглом.
+3. Подключи донгл к ПК по USB — клавиатура определится как HID-устройство.
+4. Открой **ZMK Studio** ([studio.zmk.dev](https://studio.zmk.dev)) — раскладка редактируется **без** `&studio_unlock`.
+
+### Шаг 6. Проверка
+
+- ✅ Через 20 с простоя появляется мордочка, висит 30 с, экран гаснет.
+- ✅ Левый энкодер — громкость, правый — трек/каретка по слоям.
+- ✅ Tap-dance на `M`, комбо `Q+E` переключает язык.
+- ✅ ZMK Studio открывается и показывает KLOR с наклонными тамбами.
+
+---
+
+## ⌨️ Раскладка
+
+- **Слои**: `BASE`, `SYMBOLS`, `NUMBERS`, `ADJUST`, `EXTRA`
+- **Левый энкодер** (все слои): `C_VOL_UP` / `C_VOL_DN`
+- **Правый энкодер на BASE**: `C_NEXT` / `C_PREV` (сначала трек вперёд)
+- **Правый энкодер на остальных слоях**: `&kp LEFT` / `&kp RIGHT` (каретка)
+- **Tap-dance на `M`**: 1 нажатие = `M`, 2 = `]` (`Ъ` в русской раскладке)
+- **Комбо `Q + E`**: переключение языка (`Win+Space`)
+
+---
+
+## 🐛 Известные проблемы
+
+- **Энкодер на вторичной половине** не работает — ограничение ZMK.
+- **Трекбол Pixart PAW3204** не реализован (нужен кастомный драйвер).
+- **Артефакт на экране донгла**: ST7789V захватывает мусор в последней строке → картинка уменьшена до **276×236** и сдвинута `lv_obj_align(..., -12)`.
+- **Сброс idle-таймера по BLE**: `brightness_wake_screen_on_reconnect()` вызывал `record_activity_locked(false)` на каждом пакете → вызов закомментирован.
+
+---
+
+## 📝 Лицензия
+
+MIT — как ZMK и YADS.
