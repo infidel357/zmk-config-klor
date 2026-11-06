@@ -9,7 +9,7 @@
 
 ***
 
-[🇷🇺 Русский](README.ru.md) | 🇬🇧 English
+[🇷🇺 Русский](README.md) | 🇬🇧 English
 
 # KLOR — ZMK config (fork with dongle screen & ZMK Studio)
 
